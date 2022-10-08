@@ -13,7 +13,25 @@
     <title>Login</title>
 </head>
 <body>
-    <section class="container-fluid">
+    <form id="login" method="POST">
+    {{ form.hidden_tag() }}
+
+    {% for field in form 
+           if field.widget.input_type != 'hidden' %}
+        <p>
+          {{ field.label }}
+          {{ field(class_="form-control") }}
+        
+          {% for error in field.errors %}
+            <span class="form-text text-danger">{{ error }}</span>
+            
+          {% endfor %}
+        </p>
+
+      {% endfor %}
+      <button type="submit">Submit</button>
+    </form>
+    <!-- <section class="container-fluid">
         <section class="row justify-content-center">
             <section class="col-12 col-sm-6 col-md-3">
                 <form class="form-container">
@@ -35,7 +53,7 @@
                   </form>
             </section>
         </section>
-    </section>
+    </section> -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 </body>
