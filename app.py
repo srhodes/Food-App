@@ -40,11 +40,26 @@ def login():
         
         user = User.authenticate(username, password)
         if user:
-            return redirect('/home')
+            session["user_id"] = user.id
+            return redirect('/member')
         else:
             form.username.errors = ['Invalid username/password.']
 
     return render_template("login.html", form=form)
+
+@app.route('/member')
+def member():
+    if "user_id" not in session:
+        flash("You must be logged in to view!")
+        return redirect("/home")
+
+    else:
+        return render_template("member.html")
+
+@app.route('/logout')
+def logout():
+    session.pop("user_id")
+    return redirect("/home")
 
 @app.route('/diet')
 def diet():  
