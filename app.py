@@ -27,8 +27,21 @@ def index():
     res = requests.get('https://api.spoonacular.com/recipes/69095/information?apiKey=d7c35df411774b8abdc4c5197ab01533')
     return render_template("index.html", name = res.text)
 
-# @app.route('/register')
-# def register():
+@app.route('/register', methods=['GET', 'POST'])
+def register_user():
+    form = loginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        new_user = User.register(username, password)
+        db.session.add(new_user)
+        db.session.commit()
+        session["user_id"] = new_user.id
+        flash('Welcome! Successfully Created Your Account! ')
+        return redirect('/user')
+    
+    return render_template('register.html', form=form)
+
 
 @app.route('/login', methods=["GET", "POST"])
 def login():  
@@ -41,20 +54,20 @@ def login():
         user = User.authenticate(username, password)
         if user:
             session["user_id"] = user.id
-            return redirect('/member')
+            return redirect('/user')
         else:
             form.username.errors = ['Invalid username/password.']
 
     return render_template("login.html", form=form)
 
-@app.route('/member')
-def member():
+@app.route('/user')
+def user():
     if "user_id" not in session:
         flash("You must be logged in to view!")
         return redirect("/home")
 
     else:
-        return render_template("member.html")
+        return render_template("user.html")
 
 @app.route('/logout')
 def logout():
