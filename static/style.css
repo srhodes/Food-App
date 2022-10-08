@@ -18,3 +18,10 @@ form{
     top: -35px;
     left: 40px;
 }
+
+.jumbotron{
+    margin: 0px;
+} 
+.navbar{
+    margin: 0px;
+}
