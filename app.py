@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from models import db, connect_db, User
+from secrets import API_SECRET_KEY
 import requests
 
 app = Flask(__name__)
@@ -24,8 +25,18 @@ class loginForm(FlaskForm):
 
 @app.route('/home')
 def index():
-    res = requests.get('https://api.spoonacular.com/recipes/69095/information?apiKey=d7c35df411774b8abdc4c5197ab01533')
-    return render_template("index.html", name = res.text)
+    # Document at https://spoonacular.com/food-api/docs#Get-Recipe-Information
+
+    # res = requests.get('https://api.spoonacular.com/recipes/716429/information?apiKey=d7c35df411774b8abdc4c5197ab01533')
+    
+    # res = requests.get('https://api.spoonacular.com/recipes/716429/information?apiKey=d7c35df411774b8abdc4c5197ab01533')
+    res = requests.get('https://api.spoonacular.com/recipes/716429/information', params={'apiKey': API_SECRET_KEY})
+  
+    data = res.json()
+    img = data['image']
+
+    obj = {'img': img}
+    return render_template("index.html", name = img)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
