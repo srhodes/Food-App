@@ -28,9 +28,11 @@ def index():
     # Document at https://spoonacular.com/food-api/docs#Get-Recipe-Information
 
     # res = requests.get('https://api.spoonacular.com/recipes/716429/information?apiKey=d7c35df411774b8abdc4c5197ab01533')
-    
-    # res = requests.get('https://api.spoonacular.com/recipes/716429/information?apiKey=d7c35df411774b8abdc4c5197ab01533')
-    res = requests.get('https://api.spoonacular.com/recipes/716429/information', params={'apiKey': API_SECRET_KEY})
+    # https://api.spoonacular.com/recipes/716429/information?apiKey=d7c35df411774b8abdc4c5197ab01533&includeNutrition=true
+    # POST Request - https://spoonacular.com/food-api/docs#Create-Recipe-Card
+    # GET Request - https://spoonacular.com/food-api/docs#Get-Recipe-Card
+
+    res = requests.get('https://api.spoonacular.com/recipes/716429/information', params={'apiKey': API_SECRET_KEY, 'includeNutrition': True})
   
     data = res.json()
     img = data['image']
