@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block nav %}
-<img src={{name1}} alt="">
+<!-- <img src={{name1}} alt="">
 <img src={{name2}} alt="">
-<img src={{name3}} alt="">
+<img src={{name3}} alt=""> -->
 
 <!-- <h1>{{name}}</h1> -->
 <!-- <h1>Hello</h1> -->
@@ -15,10 +15,10 @@
     <a class="nav-link" href="/diet">Diet</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Custom Calculation</a>
+    <a class="nav-link" href="/price">Price</a>
   </li>
   <li class="nav-item">
-      <a class="nav-link" href="#">Custom Recipe</a>
+      <a class="nav-link" href="/nutrients">Nutrients</a>
     </li>
     {% if 'user_id' not in session %}
   <li class="nav-item">
