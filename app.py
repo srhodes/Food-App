@@ -14,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///food_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "mysecret123"
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
@@ -27,18 +28,48 @@ class loginForm(FlaskForm):
 def index():
     # Document at https://spoonacular.com/food-api/docs#Get-Recipe-Information
 
-    # res = requests.get('https://api.spoonacular.com/recipes/716429/information?apiKey=d7c35df411774b8abdc4c5197ab01533')
+    res = requests.get('https://api.spoonacular.com/recipes/716429/information?apiKey=d7c35df411774b8abdc4c5197ab01533')
     # https://api.spoonacular.com/recipes/716429/information?apiKey=d7c35df411774b8abdc4c5197ab01533&includeNutrition=true
     # POST Request - https://spoonacular.com/food-api/docs#Create-Recipe-Card
     # GET Request - https://spoonacular.com/food-api/docs#Get-Recipe-Card
 
-    res = requests.get('https://api.spoonacular.com/recipes/716429/information', params={'apiKey': API_SECRET_KEY, 'includeNutrition': True})
-  
-    data = res.json()
-    img = data['image']
+    # https://api.spoonacular.com/mealplanner/generate?timeFrame=day,targetCalories=2000&apiKey=d7c35df411774b8abdc4c5197ab01533 
 
-    obj = {'img': img}
-    return render_template("index.html", name = img)
+    # res = requests.get('https://api.spoonacular.com/recipes/716429/information', params={'apiKey': API_SECRET_KEY, 'includeNutrition': True})
+    
+    res = requests.get('https://api.spoonacular.com/mealplanner/generate', params={'apiKey': API_SECRET_KEY, 'timeFrame':'day', 'targetCalories': 2000})
+
+
+    data = res.json()
+    # img = data['image']
+
+    # obj = {'img': img}
+    firstMealID= data['meals'][0]['id']
+    secondMealID = data['meals'][1]['id']
+    thirdMealID = data['meals'][2]['id']
+    mealList = [firstMealID, secondMealID, thirdMealID]
+
+    # for meal in mealList
+    # print(meal)
+    #
+    
+    
+    res1 = requests.get(f'https://api.spoonacular.com/recipes/{firstMealID}/information', params={'apiKey': API_SECRET_KEY, 'includeNutrition': True})
+    res2 = requests.get(f'https://api.spoonacular.com/recipes/{secondMealID}/information', params={'apiKey': API_SECRET_KEY, 'includeNutrition': True})
+    res3 = requests.get(f'https://api.spoonacular.com/recipes/{thirdMealID}/information', params={'apiKey': API_SECRET_KEY, 'includeNutrition': True})
+
+    data1 = res1.json() 
+    data2 = res2.json() 
+    data3 = res3.json() 
+    resList = [data1['image'], data2['image'], data3['image']]
+
+    # for meal in mealList:
+    #     print(meal)
+    #     resList.append(meal) 
+    #     print(resList)
+
+    # data2 = res2.json()
+    return render_template("index.html", name1 = data1['image'], name2 =data2['image'] , name3=data3['image'])
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
